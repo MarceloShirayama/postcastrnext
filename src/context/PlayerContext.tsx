@@ -4,23 +4,25 @@ type Episode = {
   title: string;
   members: string;
   thumbnail: string;
-  file: { url: string, type: string, duration: string };
-  // duration: number;
-  // url: string;
+  // file: { url: string, type: string, duration: string };
+  duration: number;
+  url: string;
 };
 
 type PlayerContextData = {
   episodeList: Episode[];
   currentEpisodeIndex: number;
   isPlaying: boolean;
+  isLooping: boolean;
+  hasPrevious: boolean;
+  hasNext: boolean;
   play: (episode: Episode) => void;
   playList: (list: Episode[], index: number) => void;
   playNext: () => void;
   playPrev: () => void;
   setPlayingState: (state: boolean) => void;
   togglePlay: () => void;
-  hasPrevious: boolean;
-  hasNext: boolean;
+  toggleLoop: () => void;
 };
 
 type PlayerContextProviderProps = {
@@ -34,6 +36,7 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
   const [episodeList, setEpisodeList] = useState([]);
   const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(0);
   const[isPlaying, setIsPlaying] = useState(false);
+  const[isLooping, setIsLooping] = useState(false);
 
   function play(episode: Episode) {
     setEpisodeList([episode]);
@@ -49,6 +52,10 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
 
   function togglePlay() {
     setIsPlaying(!isPlaying);
+  }
+
+  function toggleLoop() {
+    setIsLooping(!isLooping);
   }
 
   function setPlayingState(state: boolean) {
@@ -78,10 +85,12 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
         currentEpisodeIndex,
         play,
         isPlaying,
+        isLooping,
         playList,
         playPrev,
         playNext,
         togglePlay,
+        toggleLoop,
         setPlayingState,
         hasPrevious,
         hasNext

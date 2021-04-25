@@ -68,7 +68,7 @@ type Episode = {
   published_at: string;
   publishedAt: string;
   thumbnail: string;
-  file: { url: string, type: string, duration: string };
+  // file: { url: string, type: string, duration: string };
   durationAsString: string;
   duration: number;
   url: string;
