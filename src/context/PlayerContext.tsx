@@ -1,11 +1,12 @@
-import { Context, createContext, useState, ReactNode } from 'react';
+import { Context, createContext, useState, ReactNode, useContext } from 'react';
 
 type Episode = {
   title: string;
   members: string;
   thumbnail: string;
-  duration: number;
-  url: string;
+  file: { url: string, type: string, duration: string };
+  // duration: number;
+  // url: string;
 };
 
 type PlayerContextData = {
@@ -18,13 +19,16 @@ type PlayerContextData = {
   playPrev: () => void;
   setPlayingState: (state: boolean) => void;
   togglePlay: () => void;
+  hasPrevious: boolean;
+  hasNext: boolean;
 };
 
 type PlayerContextProviderProps = {
   children: ReactNode;
 }
 
-export const PlayerContext = createContext({} as PlayerContextData);
+// export const PlayerContext = createContext({} as PlayerContextData);
+const PlayerContext = createContext({} as PlayerContextData);
 
 export function PlayerContextProvider({ children }: PlayerContextProviderProps) {
   const [episodeList, setEpisodeList] = useState([]);
@@ -51,16 +55,17 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
     setIsPlaying(state);
   }
 
+  const hasPrevious = currentEpisodeIndex > 0;
+  const hasNext = (currentEpisodeIndex + 1) < episodeList.length;
+
   function playNext() {
-    const nextEpisodeIndex = currentEpisodeIndex + 1;
-    
-    if (nextEpisodeIndex < episodeList.length) {
+    if (hasNext) {
       setCurrentEpisodeIndex(currentEpisodeIndex + 1);
     }
   }
 
   function playPrev() {
-    if (currentEpisodeIndex > 0) {
+    if (hasPrevious) {
       setCurrentEpisodeIndex(currentEpisodeIndex - 1);
     }
     
@@ -77,7 +82,9 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
         playPrev,
         playNext,
         togglePlay,
-        setPlayingState
+        setPlayingState,
+        hasPrevious,
+        hasNext
       }
     }
     >
@@ -86,3 +93,7 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
   )
 
 }
+
+export const usePlayer = () => {
+  return useContext(PlayerContext);
+};
