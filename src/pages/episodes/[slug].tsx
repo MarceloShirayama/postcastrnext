@@ -1,6 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import Head from 'next/head';
 
 import { format, parseISO } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
@@ -18,9 +19,9 @@ type Episode = {
   published_at: string;
   publishedAt: string;
   thumbnail: string;
-  file: { url: string, type: string, duration: string };
-  // duration: number;
-  // url: string;
+  // file: { url: string, type: string, duration: string };
+  duration: number;
+  url: string;
   description: string;
   durationAsString: string;
 };;
@@ -33,6 +34,10 @@ export default function Episode({ episode }: EpisodeProps) {
   const { play } = usePlayer();
   return (
     <div className={styles.episode}>
+      <Head>
+        <title>{episode.title} | Postcastr</title>
+      </Head>
+      
       <div className={styles.thumbnailContainer}>
         <Link href="/">
           <button type="button">

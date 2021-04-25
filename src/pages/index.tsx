@@ -51,6 +51,7 @@ export async function getServerSideProps() {
 
 import { GetStaticProps } from 'next';
 import Image from 'next/image';
+import Head from 'next/head';
 import Link from 'next/link';
 import { format, parseISO } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
@@ -68,7 +69,7 @@ type Episode = {
   published_at: string;
   publishedAt: string;
   thumbnail: string;
-  // file: { url: string, type: string, duration: string };
+  file: { url: string, type: string, duration: string };
   durationAsString: string;
   duration: number;
   url: string;
@@ -86,6 +87,10 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
 
   return (
     <div className={styles.homepage}>
+      <Head>
+        <title>Home | Postcastr</title>
+      </Head>
+
       <section className={styles.latestEpisodes}>
         <h2>Últimos lançamentos</h2>
 
